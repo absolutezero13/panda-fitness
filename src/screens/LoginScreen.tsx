@@ -1,57 +1,78 @@
 import React, {useState} from 'react';
-import {
-  Text,
-  TextInput,
-  StyleSheet,
-  KeyboardAvoidingView,
-  Image,
-} from 'react-native';
+import {Text, TextInput, StyleSheet, Image, View} from 'react-native';
 import {themeColors} from '../theme/colors';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {assets} from '../assets';
+import {
+  NavigationProp,
+  StackActions,
+  useNavigation,
+} from '@react-navigation/native';
+import {RootStackParamList} from '../navigation/RootNavigation';
+import {KeyboardAvoidingScrollView} from 'react-native-keyboard-avoiding-scroll-view';
+import {SCREEN_WIDTH} from '../theme/sizes';
 
 const LoginScreen = () => {
+  const {dispatch} = useNavigation<NavigationProp<RootStackParamList>>();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = () => {};
+  const handleLogin = () => {
+    dispatch(StackActions.replace('Home'));
+  };
 
   return (
-    <KeyboardAvoidingView style={styles.container}>
-      <Image
-        source={assets.pandaLogo}
-        style={{width: 200, height: 200, alignSelf: 'center', marginBottom: 48}}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        value={email}
-        placeholderTextColor={themeColors.light}
-        onChangeText={setEmail}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        value={password}
-        placeholderTextColor={themeColors.light}
-        onChangeText={setPassword}
-      />
-      <TouchableOpacity
-        activeOpacity={0.8}
-        style={styles.button}
-        onPress={handleLogin}>
-        <Text style={{color: themeColors.primary}}>Login</Text>
-      </TouchableOpacity>
-    </KeyboardAvoidingView>
+    <View style={styles.container}>
+      <KeyboardAvoidingScrollView
+        bounces={false}
+        keyboardShouldPersistTaps="handled"
+        contentContainerStyle={styles.content}>
+        <Image source={assets.pandaLogo} style={styles.logo} />
+        <TextInput
+          style={styles.input}
+          placeholder="Email"
+          value={email}
+          placeholderTextColor={themeColors.light}
+          onChangeText={setEmail}
+          autoCapitalize="none"
+          cursorColor={themeColors.light}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Password"
+          value={password}
+          placeholderTextColor={themeColors.light}
+          onChangeText={setPassword}
+          autoCapitalize="none"
+          secureTextEntry
+          cursorColor={themeColors.light}
+        />
+        <TouchableOpacity
+          activeOpacity={0.8}
+          style={styles.button}
+          onPress={handleLogin}>
+          <Text style={{color: themeColors.primary}}>Login</Text>
+        </TouchableOpacity>
+      </KeyboardAvoidingScrollView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 24,
-    justifyContent: 'center',
+    paddingHorizontal: 24,
     backgroundColor: themeColors.primary,
+  },
+  content: {
+    flexGrow: 1,
+    justifyContent: 'center',
+  },
+  logo: {
+    width: SCREEN_WIDTH / 2,
+    height: SCREEN_WIDTH / 2,
+    alignSelf: 'center',
+    marginBottom: 48,
   },
   title: {
     fontSize: 24,
@@ -71,7 +92,6 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: themeColors.light,
     padding: 12,
-    marginTop: 18,
     borderRadius: 8,
     alignItems: 'center',
   },
