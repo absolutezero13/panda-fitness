@@ -43,6 +43,7 @@ export const Workout: FC<Props> = ({
       onPress(workout, sets);
     }
   };
+
   return (
     <View>
       <TouchableOpacity
@@ -59,7 +60,10 @@ export const Workout: FC<Props> = ({
         ) : (
           <View style={styles.setsSection}>
             <Text
-              onPress={() => onAddOrMinusPress?.(workout, -1)}
+              onPress={() => {
+                if (workout.sets <= 0) return;
+                onAddOrMinusPress?.(workout, -1);
+              }}
               style={styles.addOrMinus}>
               -
             </Text>
