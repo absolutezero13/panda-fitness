@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {StatusBar, StyleSheet, Text, View} from 'react-native';
 import Wrapper from '../components/Wrapper';
 import {FlatList} from 'react-native-gesture-handler';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -11,20 +11,27 @@ import {RootStackParamList} from '../navigation/RootNavigation';
 import getTodaysWorkout from '../utils/getTodaysWorkout';
 import {Workout} from '../components/Workout';
 import AddWorkoutButton from '../components/AddWorkout';
+import {updateWorkouts} from '../utils/updateWorkouts';
+import {DefaultWorkout} from '../zustand/useDefaultWorkouts';
 
 const HomeScreen = () => {
-  const {workouts, todaysWorkout, setTodaysWorkout} = useWorkoutStore();
+  const {workouts} = useWorkoutStore();
   const {navigate} = useNavigation<NavigationProp<RootStackParamList>>();
 
-  useEffect(() => {
-    const foundTodaysWorkout = getTodaysWorkout(workouts);
-    setTodaysWorkout(foundTodaysWorkout);
-  }, [workouts, setTodaysWorkout]);
+  const todaysWorkout = getTodaysWorkout(workouts);
 
   const isEmpty = todaysWorkout?.exercises.length === 0;
 
+  useEffect(() => {
+    StatusBar.setBarStyle('light-content');
+  }, []);
+
   const onAddWorkoutPress = () => {
     navigate('AddWorkout');
+  };
+
+  const onAddOrMinusPress = (item: DefaultWorkout, value: number) => {
+    updateWorkouts(item, value, false);
   };
 
   return (
@@ -38,10 +45,14 @@ const HomeScreen = () => {
               ListEmptyComponent={() => (
                 <WorkoutsEmptyState onPress={onAddWorkoutPress} />
               )}
-              style={{flexGrow: 1}}
-              contentContainerStyle={{flexGrow: 1}}
+              style={styles.flexGrow}
+              contentContainerStyle={styles.flexGrow}
               renderItem={({item}) => (
-                <Workout item={item} addMode={false} onPress={() => {}} />
+                <Workout
+                  item={item}
+                  addMode={false}
+                  onAddOrMinusPress={onAddOrMinusPress}
+                />
               )}
               keyExtractor={item => item.id}
             />
@@ -58,6 +69,9 @@ const HomeScreen = () => {
 const styles = StyleSheet.create({
   safe: {
     flex: 1,
+  },
+  flexGrow: {
+    flexGrow: 1,
   },
   content: {
     flexGrow: 1,

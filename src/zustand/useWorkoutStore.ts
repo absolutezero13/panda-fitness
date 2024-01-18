@@ -1,7 +1,11 @@
 import dayjs from 'dayjs';
 import localeData from 'dayjs/plugin/localeData';
 import {ImageSourcePropType} from 'react-native';
+import {MMKVLoader} from 'react-native-mmkv-storage';
+import {persist, createJSONStorage} from 'zustand/middleware';
 import {create} from 'zustand';
+
+const mmkv = new MMKVLoader().initialize();
 
 dayjs.extend(localeData);
 
@@ -29,20 +33,24 @@ const createInitialState = (): Workout[] => {
   });
 };
 
-type TWorkoutStore = {
+export type TWorkoutStore = {
   workouts: Workout[];
   setWorkouts: (workouts: Workout[]) => void;
-  todaysWorkout: Workout;
-  setTodaysWorkout: (workout: Workout) => void;
 };
 
 const initialState = createInitialState();
 
-const useWorkoutStore = create<TWorkoutStore>(set => ({
-  workouts: initialState,
-  setWorkouts: (workouts: Workout[]) => set({workouts}),
-  todaysWorkout: initialState[0],
-  setTodaysWorkout: (workout: Workout) => set({todaysWorkout: workout}),
-}));
+const useWorkoutStore = create(
+  persist<TWorkoutStore>(
+    set => ({
+      workouts: initialState,
+      setWorkouts: (workouts: Workout[]) => set({workouts}),
+    }),
+    {
+      name: 'workout-storage',
+      storage: createJSONStorage(() => mmkv as any),
+    },
+  ),
+);
 
 export default useWorkoutStore;

@@ -18,13 +18,18 @@ const ITEM_HEIGHT = 80;
 interface Props {
   item: DefaultWorkout | UserExercise;
   addMode?: boolean;
-  onPress: (item: DefaultWorkout | UserExercise, sets: number) => void;
+  onPress?: (item: DefaultWorkout | UserExercise, sets: number) => void;
+  onAddOrMinusPress?: (
+    item: DefaultWorkout | UserExercise,
+    value: number,
+  ) => void;
 }
 
 export const Workout: FC<Props> = ({
   item: workout,
   addMode = true,
   onPress,
+  onAddOrMinusPress,
 }) => {
   const [sets, setSets] = useState(workout.sets);
 
@@ -34,7 +39,7 @@ export const Workout: FC<Props> = ({
       return;
     }
 
-    if (addMode) {
+    if (addMode && onPress) {
       onPress(workout, sets);
     }
   };
@@ -52,9 +57,21 @@ export const Workout: FC<Props> = ({
         {addMode ? (
           <Image source={assets.addIcon} style={styles.addIcon} />
         ) : (
-          <View style={styles.addIcon}>
-            <Text style={styles.sets}>{workout.sets}</Text>
-            <Text style={styles.setsText}>Sets</Text>
+          <View style={styles.setsSection}>
+            <Text
+              onPress={() => onAddOrMinusPress?.(workout, -1)}
+              style={styles.addOrMinus}>
+              -
+            </Text>
+            <View style={{marginHorizontal: 6}}>
+              <Text style={styles.sets}>{workout.sets}</Text>
+              <Text style={styles.setsText}>Sets</Text>
+            </View>
+            <Text
+              onPress={() => onAddOrMinusPress?.(workout, 1)}
+              style={styles.addOrMinus}>
+              +
+            </Text>
           </View>
         )}
       </TouchableOpacity>
@@ -113,6 +130,13 @@ export const styles = StyleSheet.create({
     resizeMode: 'contain',
     position: 'absolute',
     right: 20,
+    flexDirection: 'row',
+  },
+  setsSection: {
+    flexDirection: 'row',
+    position: 'absolute',
+    right: 20,
+    alignItems: 'center',
   },
   inputsWrapper: {alignSelf: 'center'},
   input: {
@@ -141,5 +165,10 @@ export const styles = StyleSheet.create({
   setsText: {
     color: themeColors.light,
     textAlign: 'center',
+  },
+  addOrMinus: {
+    color: themeColors.light,
+    fontSize: 24,
+    fontWeight: 'bold',
   },
 });
