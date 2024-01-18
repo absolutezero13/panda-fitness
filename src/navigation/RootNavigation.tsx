@@ -2,6 +2,7 @@ import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import * as screens from '../screens';
+import {themeColors} from '../theme/colors';
 
 export type RootStackParamList = {
   Login: undefined;
@@ -28,7 +29,19 @@ const RootNavigation = () => {
           }}
           component={screens.HomeScreen}
         />
-        
+        <Stack.Screen
+          name="AddWorkout"
+          options={{
+            presentation: 'modal',
+            headerTitle: 'Add Workout',
+            headerShadowVisible: false,
+            headerStyle: {
+              backgroundColor: themeColors.primary,
+            },
+            headerTintColor: themeColors.light,
+          }}
+          component={screens.AddWorkoutScreen}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

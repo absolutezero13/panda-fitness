@@ -1,7 +1,7 @@
 import React, {FC} from 'react';
-import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
-import {assets} from '../assets';
+import {StyleSheet, Text, View} from 'react-native';
 import {themeColors} from '../theme/colors';
+import AddWorkoutButton from './AddWorkout';
 
 interface Props {
   onPress: () => void;
@@ -11,10 +11,7 @@ const WorkoutsEmptyState: FC<Props> = ({onPress}) => {
   return (
     <View style={styles.wrapper}>
       <Text style={styles.title}>You have no workouts for today.</Text>
-      <Pressable onPress={onPress} style={styles.addButton}>
-        <Image source={assets.addIcon} style={styles.addIcon} />
-        <Text style={styles.addWorkoutText}>Add Workout</Text>
-      </Pressable>
+      <AddWorkoutButton onPress={onPress} />
     </View>
   );
 };

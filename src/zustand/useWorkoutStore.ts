@@ -1,19 +1,19 @@
 import dayjs from 'dayjs';
 import localeData from 'dayjs/plugin/localeData';
+import {ImageSourcePropType} from 'react-native';
 import {create} from 'zustand';
 
 dayjs.extend(localeData);
 
-type Exercise = {
+export type UserExercise = {
   id: string;
   name: string;
   sets: number;
-  reps: number;
-  weight: number;
+  image: ImageSourcePropType;
 };
 
-type Workout = {
-  exercises: Exercise[];
+export type Workout = {
+  exercises: UserExercise[];
   day: string;
   id: string;
 };
@@ -32,11 +32,17 @@ const createInitialState = (): Workout[] => {
 type TWorkoutStore = {
   workouts: Workout[];
   setWorkouts: (workouts: Workout[]) => void;
+  todaysWorkout: Workout;
+  setTodaysWorkout: (workout: Workout) => void;
 };
 
+const initialState = createInitialState();
+
 const useWorkoutStore = create<TWorkoutStore>(set => ({
-  workouts: createInitialState(),
+  workouts: initialState,
   setWorkouts: (workouts: Workout[]) => set({workouts}),
+  todaysWorkout: initialState[0],
+  setTodaysWorkout: (workout: Workout) => set({todaysWorkout: workout}),
 }));
 
 export default useWorkoutStore;
