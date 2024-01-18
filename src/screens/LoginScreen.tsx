@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
-import {Text, TextInput, StyleSheet, Image, View} from 'react-native';
+import {TextInput, StyleSheet, Image} from 'react-native';
+import {KeyboardAvoidingScrollView} from 'react-native-keyboard-avoiding-scroll-view';
 import {themeColors} from '../theme/colors';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 import {assets} from '../assets';
 import {
   NavigationProp,
@@ -9,9 +9,10 @@ import {
   useNavigation,
 } from '@react-navigation/native';
 import {RootStackParamList} from '../navigation/RootNavigation';
-import {KeyboardAvoidingScrollView} from 'react-native-keyboard-avoiding-scroll-view';
 import {SCREEN_WIDTH} from '../theme/sizes';
-
+import Wrapper from '../components/Wrapper';
+import AppButton from '../components/AppButton';
+// TODO : ADD KEYCHAIN
 const LoginScreen = () => {
   const {dispatch} = useNavigation<NavigationProp<RootStackParamList>>();
   const [email, setEmail] = useState('');
@@ -22,7 +23,7 @@ const LoginScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <Wrapper>
       <KeyboardAvoidingScrollView
         bounces={false}
         keyboardShouldPersistTaps="handled"
@@ -47,23 +48,19 @@ const LoginScreen = () => {
           secureTextEntry
           cursorColor={themeColors.light}
         />
-        <TouchableOpacity
+        {/* <TouchableOpacity
           activeOpacity={0.8}
           style={styles.button}
           onPress={handleLogin}>
           <Text style={{color: themeColors.primary}}>Login</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
+        <AppButton title="Login" onPress={handleLogin} style={styles.button} />
       </KeyboardAvoidingScrollView>
-    </View>
+    </Wrapper>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingHorizontal: 24,
-    backgroundColor: themeColors.primary,
-  },
   content: {
     flexGrow: 1,
     justifyContent: 'center',
