@@ -13,9 +13,10 @@ import {Workout} from '../components/Workout';
 import AddWorkoutButton from '../components/AddWorkout';
 import {updateWorkouts} from '../utils/updateWorkouts';
 import {DefaultWorkout} from '../zustand/useDefaultWorkouts';
+import AppButton from '../components/AppButton';
 
 const HomeScreen = () => {
-  const {workouts} = useWorkoutStore();
+  const {workouts, setWorkouts} = useWorkoutStore();
   const {navigate} = useNavigation<NavigationProp<RootStackParamList>>();
 
   const todaysWorkout = getTodaysWorkout(workouts);
@@ -34,6 +35,19 @@ const HomeScreen = () => {
     updateWorkouts(item, value, false);
   };
 
+  const onClearPress = () => {
+    const newWorkouts = workouts.map(workout => {
+      if (workout.id === todaysWorkout?.id) {
+        return {
+          ...workout,
+          exercises: [],
+        };
+      }
+      return workout;
+    });
+    setWorkouts(newWorkouts);
+  };
+
   return (
     <Wrapper>
       <SafeAreaView style={styles.safe}>
@@ -47,6 +61,17 @@ const HomeScreen = () => {
               )}
               style={styles.flexGrow}
               contentContainerStyle={styles.flexGrow}
+              ListFooterComponent={
+                isEmpty
+                  ? undefined
+                  : () => (
+                      <AppButton
+                        style={{marginTop: 24}}
+                        title="Clear"
+                        onPress={onClearPress}
+                      />
+                    )
+              }
               renderItem={({item}) => (
                 <Workout
                   item={item}
@@ -76,6 +101,7 @@ const styles = StyleSheet.create({
   content: {
     flexGrow: 1,
     paddingTop: 20,
+    paddingBottom: 20,
   },
   title: {
     fontSize: 24,

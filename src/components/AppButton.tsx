@@ -1,31 +1,17 @@
 import React, {FC} from 'react';
-import {ActivityIndicator, StyleSheet, Text} from 'react-native';
+import {StyleSheet, Text, TextStyle, ViewStyle} from 'react-native';
 import {themeColors} from '../theme/colors';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
 interface Props {
   title: string;
   onPress: () => void;
-  style?: any;
-  textStyle?: any;
+  style?: ViewStyle;
+  textStyle?: TextStyle;
   disabled?: boolean;
-  loading?: boolean;
-  loadingColor?: string;
-  loadingSize?: number | 'small' | 'large';
-  loadingStyle?: any;
 }
 
-const AppButton: FC<Props> = ({
-  title,
-  onPress,
-  style,
-  textStyle,
-  disabled,
-  loading,
-  loadingColor,
-  loadingSize,
-  loadingStyle,
-}) => {
+const AppButton: FC<Props> = ({title, onPress, style, textStyle, disabled}) => {
   return (
     <TouchableOpacity
       activeOpacity={0.8}
@@ -38,24 +24,16 @@ const AppButton: FC<Props> = ({
       ]}
       onPress={onPress}
       disabled={disabled}>
-      {loading ? (
-        <ActivityIndicator
-          color={loadingColor || themeColors.light}
-          size={loadingSize || 'small'}
-          style={[styles.loading, loadingStyle]}
-        />
-      ) : (
-        <Text
-          style={[
-            styles.text,
-            textStyle,
-            {
-              color: disabled ? themeColors.disabledText : themeColors.primary,
-            },
-          ]}>
-          {title}
-        </Text>
-      )}
+      <Text
+        style={[
+          styles.text,
+          textStyle,
+          {
+            color: disabled ? themeColors.disabledText : themeColors.primary,
+          },
+        ]}>
+        {title}
+      </Text>
     </TouchableOpacity>
   );
 };
