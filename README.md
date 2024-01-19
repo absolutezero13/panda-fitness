@@ -44,11 +44,11 @@ yarn android
 
 ```
 
-## Project
+##  Project
 
 Panda fitness is a mobile application that allows users to track their fitness routines and progress. You can add/remove exercises for week's current day. It's in baby steps right now, but I hope to make it a full-fledged fitness app in the future.
 
-## Technologies
+##  Technologies
 
 - React Native
 - React Navigation
