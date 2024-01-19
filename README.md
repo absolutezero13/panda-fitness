@@ -34,12 +34,14 @@ To run the project, run the command below.
 
 ```
 yarn ios
+
 ```
 
 or
 
 ```
 yarn android
+
 ```
 
 ## Project
