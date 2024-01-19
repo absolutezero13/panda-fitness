@@ -125,7 +125,7 @@ export const styles = StyleSheet.create({
     fontSize: 18,
     alignSelf: 'center',
     color: themeColors.light,
-    marginLeft: 20,
+    marginLeft: 16,
     fontWeight: 'bold',
   },
   addIcon: {

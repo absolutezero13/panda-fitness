@@ -22,7 +22,7 @@ export type Workout = {
   id: string;
 };
 
-// create data from wee kdays
+// create data from week days
 const createInitialState = (): Workout[] => {
   return dayjs.weekdays().map((day: string) => {
     return {
