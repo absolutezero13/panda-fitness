@@ -44,7 +44,7 @@ yarn android
 
 ```
 
-### Technologies
+## Technologies
 
 - React Native
 - React Navigation
