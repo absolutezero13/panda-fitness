@@ -1,6 +1,6 @@
 ## Pre-requisites
 
-- [Node.js](https://nodejs.org/en/)
+- [Node.js](https://nodejs.org/en/) (version >= 16.0.0)
 - [Xcode](https://developer.apple.com/xcode/)
 - [Android Studio](https://developer.android.com/studio)
 - [Cocoapods](https://cocoapods.org/)
