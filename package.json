@@ -11,6 +11,7 @@
     "postinstall": "jetifier -r"
   },
   "dependencies": {
+    "@gorhom/bottom-sheet": "^4.6.0",
     "@react-native-community/masked-view": "^0.1.11",
     "@react-navigation/native": "^6.1.9",
     "@react-navigation/native-stack": "^6.9.17",

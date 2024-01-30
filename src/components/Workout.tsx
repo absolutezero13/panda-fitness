@@ -1,4 +1,4 @@
-import React, {FC, useState} from 'react';
+import React, {FC, useMemo, useRef, useState} from 'react';
 import {
   Alert,
   Image,
@@ -12,6 +12,7 @@ import {TextInput} from 'react-native-gesture-handler';
 import {themeColors} from '../theme/colors';
 import {assets} from '../assets';
 import {UserExercise} from '../zustand/useWorkoutStore';
+import BottomSheet from '@gorhom/bottom-sheet';
 
 const ITEM_HEIGHT = 80;
 
@@ -32,6 +33,12 @@ export const Workout: FC<Props> = ({
   onAddOrMinusPress,
 }) => {
   const [sets, setSets] = useState(workout.sets);
+
+  // ref
+  const bottomSheetRef = useRef<BottomSheet>(null);
+
+  // variables
+  const snapPoints = useMemo(() => ['25%', '50%'], []);
 
   const onPressHandler = () => {
     if (sets === 0) {
@@ -79,7 +86,7 @@ export const Workout: FC<Props> = ({
           </View>
         )}
       </TouchableOpacity>
-      {addMode && (
+      {/* {addMode && (
         <View style={styles.inputsWrapper}>
           <Text style={styles.inputText}> Sets </Text>
           <TextInput
@@ -94,7 +101,7 @@ export const Workout: FC<Props> = ({
             cursorColor={themeColors.light}
           />
         </View>
-      )}
+      )} */}
     </View>
   );
 };
