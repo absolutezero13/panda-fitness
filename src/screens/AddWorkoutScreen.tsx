@@ -1,6 +1,14 @@
 import React, {useRef, useState} from 'react';
-import {StyleSheet, Text, TextInput, View} from 'react-native';
-import useDefaultWorkouts from '../zustand/useDefaultWorkouts';
+import {
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import useDefaultWorkouts, {
+  DefaultWorkout,
+} from '../zustand/useDefaultWorkouts';
 import Wrapper from '../components/Wrapper';
 import {FlatList} from 'react-native-gesture-handler';
 import {Workout} from '../components/Workout';
@@ -13,6 +21,7 @@ const AddWorkoutScreen = () => {
   const bottomSheetRef = useRef<BottomSheet>(null);
 
   const [sets, setSets] = useState(0);
+  const [selectedItem, setSelectedItem] = useState<DefaultWorkout | null>(null);
 
   const snapPoints = ['25%', '50%'];
 
@@ -24,7 +33,10 @@ const AddWorkoutScreen = () => {
           <Workout
             item={item}
             addMode={true}
-            onPress={() => bottomSheetRef.current?.expand()}
+            onPress={() => {
+              setSelectedItem(item);
+              bottomSheetRef.current?.expand();
+            }}
           />
         )}
         keyExtractor={item => item.id.toString()}
@@ -56,6 +68,17 @@ const AddWorkoutScreen = () => {
             autoCapitalize="none"
             cursorColor={themeColors.light}
           />
+          <TouchableOpacity
+            onPress={() => {
+              if (!selectedItem) {
+                return;
+              }
+
+              updateWorkouts(selectedItem, sets);
+              bottomSheetRef.current?.close();
+            }}>
+            <Text style={styles.sets}>Add</Text>
+          </TouchableOpacity>
         </View>
       </BottomSheet>
     </Wrapper>

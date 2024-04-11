@@ -8,18 +8,17 @@ import useWorkoutStore from '../zustand/useWorkoutStore';
 import WorkoutsEmptyState from '../components/EmptyState';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {RootStackParamList} from '../navigation/RootNavigation';
-import getTodaysWorkout from '../utils/getTodaysWorkout';
 import {Workout} from '../components/Workout';
 import AddWorkoutButton from '../components/AddWorkout';
 import {updateWorkouts} from '../utils/updateWorkouts';
 import {DefaultWorkout} from '../zustand/useDefaultWorkouts';
 import AppButton from '../components/AppButton';
+import dayjs from 'dayjs';
 
 const HomeScreen = () => {
-  const {workouts, setWorkouts} = useWorkoutStore();
+  const workoutStore = useWorkoutStore();
   const {navigate} = useNavigation<NavigationProp<RootStackParamList>>();
-
-  const todaysWorkout = getTodaysWorkout(workouts);
+  const todaysWorkout = workoutStore[dayjs().day()];
 
   const isEmpty = todaysWorkout?.exercises.length === 0;
 
@@ -36,23 +35,21 @@ const HomeScreen = () => {
   };
 
   const onClearPress = () => {
-    const newWorkouts = workouts.map(workout => {
-      if (workout.id === todaysWorkout?.id) {
-        return {
-          ...workout,
-          exercises: [],
-        };
-      }
-      return workout;
+    useWorkoutStore.setState({
+      [dayjs().day()]: {
+        ...todaysWorkout,
+        exercises: [],
+      },
     });
-    setWorkouts(newWorkouts);
   };
 
   return (
     <Wrapper>
       <SafeAreaView style={styles.safe}>
         <View style={styles.content}>
-          <Text style={styles.title}>Today's Workout</Text>
+          <Text style={styles.title}>
+            Today's Workout ({dayjs().format('dddd')})
+          </Text>
           <View style={styles.todaysWorkoutsWrapper}>
             <FlatList
               data={todaysWorkout?.exercises}

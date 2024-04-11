@@ -4,7 +4,7 @@ import useWorkoutStore, {
   TWorkoutStore,
   UserExercise,
 } from '../zustand/useWorkoutStore';
-import getTodaysWorkout from './getTodaysWorkout';
+import dayjs from 'dayjs';
 
 export const updateWorkouts = (
   item: DefaultWorkout,
@@ -12,11 +12,11 @@ export const updateWorkouts = (
   shouldShowAlert = true,
 ) => {
   const workoutsStore = useWorkoutStore.getState() as TWorkoutStore;
-  const workouts = workoutsStore.workouts;
-  const todaysWorkout = getTodaysWorkout(workouts);
+  const todaysWorkout = workoutsStore[dayjs().day()];
   const existingWorkout = todaysWorkout.exercises.find(
     workout => workout.id === item.id,
   );
+
   if (!existingWorkout) {
     const newWorkout: UserExercise = {
       id: item.id,
@@ -30,15 +30,7 @@ export const updateWorkouts = (
       exercises: [...todaysWorkout.exercises, newWorkout],
     };
 
-    const newWeeklyWorkouts = workouts.map(workout => {
-      if (workout.day === todaysWorkout.day) {
-        return newTodaysWorkout;
-      }
-
-      return workout;
-    });
-
-    useWorkoutStore.setState({workouts: newWeeklyWorkouts});
+    useWorkoutStore.setState({[dayjs().day()]: newTodaysWorkout});
     if (shouldShowAlert) {
       Alert.alert('Success', 'Workout updated successfully');
     }
@@ -59,15 +51,7 @@ export const updateWorkouts = (
     exercises: updatedExercises,
   };
 
-  const updatedWeeklyWorkouts = workouts.map(workout => {
-    if (workout.day === todaysWorkout.day) {
-      return updatedTodaysWorkout;
-    }
-
-    return workout;
-  });
-
-  useWorkoutStore.setState({workouts: updatedWeeklyWorkouts});
+  useWorkoutStore.setState({[dayjs().day()]: updatedTodaysWorkout});
 
   if (shouldShowAlert) {
     Alert.alert('Success', 'Workout updated successfully');

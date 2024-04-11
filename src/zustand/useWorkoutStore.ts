@@ -16,35 +16,33 @@ export type UserExercise = {
   image: ImageSourcePropType;
 };
 
-export type Workout = {
+export type DailyWorkout = {
   exercises: UserExercise[];
   day: string;
   id: string;
 };
 
+export type TWorkoutStore = {[key: string]: DailyWorkout};
+
 // create data from week days
-const createInitialState = (): Workout[] => {
-  return dayjs.weekdays().map((day: string) => {
-    return {
-      day,
-      id: day,
+const createInitialState = (): TWorkoutStore => {
+  const dailyWorkouts: TWorkoutStore = {};
+
+  dayjs.weekdays().forEach((day: string, index: number) => {
+    dailyWorkouts[day] = {
       exercises: [],
+      day,
+      id: index.toString(),
     };
   });
-};
 
-export type TWorkoutStore = {
-  workouts: Workout[];
-  setWorkouts: (workouts: Workout[]) => void;
+  return dailyWorkouts;
 };
-
-const initialState = createInitialState();
 
 const useWorkoutStore = create(
   persist<TWorkoutStore>(
-    set => ({
-      workouts: initialState,
-      setWorkouts: (workouts: Workout[]) => set({workouts}),
+    () => ({
+      ...createInitialState(),
     }),
     {
       name: 'workout-storage',
